@@ -9,6 +9,7 @@ import com.simple.sjge.entities.AITestEntity2;
 import com.simple.sjge.entities.AITestEntity3;
 import com.simple.sjge.gui.Gui;
 import com.simple.sjge.gui.controls.GuiButton;
+import com.simple.sjge.gui.controls.GuiListBox;
 import com.simple.sjge.gui.controls.GuiTextField;
 import com.simple.sjge.level.TestLevel;
 
@@ -47,6 +48,14 @@ public class iMouseListener implements MouseListener {
 				else if (a instanceof GuiTextField) {
 					GuiTextField b = (GuiTextField)a;
 					b.mousePressed(i, j);
+				}
+				else if (a instanceof GuiListBox) {
+					GuiListBox b = (GuiListBox)a;
+					if (b.mousePressed(i, j)) {
+						b.checkForClicksOnItems(i, j);
+						gui.listClicked(b,  i,  j);
+					}
+					
 				}
 			}
 		}

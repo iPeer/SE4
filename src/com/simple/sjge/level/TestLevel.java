@@ -41,7 +41,7 @@ public class TestLevel extends Level {
 		addEntity(new ShieldBarTestEntity(222, 300, 16, 16, this));
 		addEntity(new PathAITestEntity(100, 500, 16, 16, this));
 		Entity offLevelEntity;
-		addEntity(offLevelEntity = new AITestEntity(-20, 0, 16, 16, this));
+		addEntity(offLevelEntity = new AITestEntity(-74, 0, 64, 64, this));
 		offLevelEntity.setShouldTick(false);
 		Entity entity = new DamageableTestEntity(width / 2, height / 2, 16, 16, this);
 		entity.setAIPackage(new BouncingAI(entity));

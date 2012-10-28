@@ -1,7 +1,12 @@
 package com.simple.sjge.entities;
 
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Vector;
+
+import javax.imageio.ImageIO;
 
 import com.simple.sjge.ai.packages.AI;
 import com.simple.sjge.collision.BBox;
@@ -36,7 +41,8 @@ public class Entity {
 	public ArrayList<Entity> targets;
 	protected int damageDelay = 30;
 	protected int damageTick = 0;
-	private boolean shouldTick = true;;
+	private boolean shouldTick = true;
+	BufferedImage sprite;
 
 	public Entity(int x, int y, int w, int h, Level level) {
 
@@ -50,6 +56,12 @@ public class Entity {
 		this.level = level;
 		this.engine = Engine.getInstance();
 		this.screen = level.getScreen();
+		try {
+			this.sprite = ImageIO.read(Engine.class.getResource("missing.png"));
+		}
+		catch (IOException e) {
+			System.err.println("Unable to set sprite for entity "+getID());
+		}
 		move(x, y, w, h, false);
 
 	}
@@ -147,7 +159,10 @@ public class Entity {
 	}
 
 	public void render() { 
-		screen.drawRect(x + level.xOffset, y + level.yOffset, w, h);
+		if (this.sprite != null)
+			screen.renderSprite(sprite, x + level.xOffset, y + level.yOffset, w, h);
+		else
+			screen.drawRect(x + level.xOffset, y + level.yOffset, w, h);
 		screen.drawRect(xbbox.x + level.xOffset, xbbox.y + level.yOffset, xbbox.w, xbbox.h, Colour.RED);
 		screen.drawRect(ybbox.x + level.xOffset, ybbox.y + level.yOffset, ybbox.w, ybbox.h, Colour.RED);
 	}

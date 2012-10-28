@@ -10,6 +10,7 @@ import com.simple.sjge.engine.Engine;
 
 public class FontRenderer {
 
+	@SuppressWarnings("unused")
 	private Engine engine;
 
 	private boolean bold;

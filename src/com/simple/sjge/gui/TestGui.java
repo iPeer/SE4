@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import com.simple.sjge.engine.Keyboard;
 import com.simple.sjge.gfx.Colour;
 import com.simple.sjge.gui.controls.GuiButton;
+import com.simple.sjge.gui.controls.GuiListBox;
 import com.simple.sjge.gui.controls.GuiTextField;
 import com.simple.sjge.util.Debug;
 
@@ -13,6 +14,7 @@ public class TestGui extends Gui {
 	private GuiTextField uneditable;
 	private GuiButton transparentDynamic, transparent100, transparent75, transparent50, transparent25;
 	boolean inc = false;
+	private GuiListBox guiListBox;
 
 	@SuppressWarnings("unchecked")
 	public TestGui() {
@@ -34,6 +36,8 @@ public class TestGui extends Gui {
 		transparent100.setColours(transparent75.getColours());
 		controls.add(transparentDynamic = new GuiButton(4, 480, 85, 100, 20, "100-0%"));
 		transparentDynamic.setColours(transparent75.getColours());
+		String[] a = {"Test1", "Test2", "Test3", "test4", "test5", "test6", "test7"};
+		controls.add(guiListBox = new GuiListBox(60, 110, a));
 	}
 	
 	public void tick() {
@@ -87,6 +91,15 @@ public class TestGui extends Gui {
 		renderBackground();
 		drawStringWithShadow(title, 30);
 		super.render();
+	}
+	
+	public void mouseWheelScrolled(int i) {
+		if (guiListBox.isMouseOver())
+			guiListBox.mouseWheelScrolled(i);
+	}
+	
+	public void listClicked(GuiListBox b, int x1, int y1) {
+		System.err.println(b.selectedName+", "+b.selected);
 	}
 	
 	public boolean pausesGame() {

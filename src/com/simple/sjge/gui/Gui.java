@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import com.simple.sjge.engine.Engine;
 import com.simple.sjge.gfx.Colour;
 import com.simple.sjge.gui.controls.GuiButton;
+import com.simple.sjge.gui.controls.GuiListBox;
 
 @SuppressWarnings("rawtypes")
 public class Gui {
@@ -76,32 +77,20 @@ public class Gui {
 	}
 
 	@Deprecated
-	public void actionPerformed(GuiButton button) {
-		
-	}
+	public void actionPerformed(GuiButton button) { }
 	@Deprecated
-	public void actionPerformedRight(GuiButton button) {
-
-	}
-
+	public void actionPerformedRight(GuiButton button) { }
 	@Deprecated
-	public void keyTyped(char keyChar, int keyCode) {
-
-	}
-	
+	public void keyTyped(char keyChar, int keyCode) { }
 	@Deprecated
-	public void actionPerformedMiddle(GuiButton button) {
-		
-	}
+	public void actionPerformedMiddle(GuiButton button) { }
 
 	public boolean pausesGame() {
 		return false;
 	}
-
 	public void actionPerformed(GuiButton b, int mouseButton) { }
-
-	public void keyTyped(KeyEvent e) {
-
-	}
+	public void keyTyped(KeyEvent e) { }
+	public void mouseWheelScrolled(int wheelRotation) {	}
+	public void listClicked(GuiListBox b, int x, int y) { }
 	
 }

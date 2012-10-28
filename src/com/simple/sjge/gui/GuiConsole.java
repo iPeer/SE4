@@ -119,6 +119,10 @@ public class GuiConsole extends Gui {
 	private void setText(String s, boolean flag) {
 		consoleInput.setText(s, flag);
 	}
+	
+	public void mouseWheelScrolled(int i) {
+		historyOffset += i;
+	}
 
 	private String getText() {
 		return consoleInput.text;

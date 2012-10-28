@@ -14,6 +14,8 @@ public class Colour extends Color {
 	public static final Colour BLUE = new Colour(0, 0, 255);
 	public static final Colour YELLOW = new Colour(Color.YELLOW.getRGB());
 	public static final Colour GREY = new Colour(Color.GRAY.getRGB());
+	public static final Colour LIGHT_GREY = new Colour(Color.LIGHT_GRAY.getRGB());
+	public static final Colour DARK_GREY = new Colour(Color.DARK_GRAY.getRGB());
 
 	public Colour(int arg0) {
 		super(arg0);

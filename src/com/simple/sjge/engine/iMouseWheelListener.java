@@ -3,6 +3,7 @@ package com.simple.sjge.engine;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
+import com.simple.sjge.gui.Gui;
 import com.simple.sjge.gui.GuiConsole;
 
 public class iMouseWheelListener implements MouseWheelListener {
@@ -15,8 +16,10 @@ public class iMouseWheelListener implements MouseWheelListener {
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
-		if (engine.currentGui instanceof GuiConsole)
-			Engine.guiConsole.historyOffset += e.getWheelRotation();
+		Gui gui = engine.currentGui;
+		gui.mouseWheelScrolled(e.getWheelRotation());
+//		if (gui instanceof GuiConsole)
+//			Engine.guiConsole.historyOffset += e.getWheelRotation();
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import com.simple.sjge.gui.Gui;
 import com.simple.sjge.gui.controls.GuiButton;
+import com.simple.sjge.gui.controls.GuiListBox;
 import com.simple.sjge.gui.controls.GuiTextField;
 import com.simple.sjge.level.Level;
 
@@ -55,6 +56,17 @@ public class iMouseMotionListener implements MouseMotionListener {
 				}
 				else if (control instanceof GuiTextField) {
 					
+				}
+				else if (control instanceof GuiListBox) {
+					GuiListBox a = (GuiListBox)control;
+					if (a.mousePressed(i, j)) {
+						a.isMouseOver = true;
+						a.checkForMouseOnList(i, j);
+					}
+					else {
+						a.clearHighlighted();
+						a.isMouseOver = false;
+					}
 				}
 			}
 		}

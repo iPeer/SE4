@@ -1,6 +1,5 @@
 package com.simple.sjge.engine.console;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -9,7 +8,6 @@ import com.simple.sjge.engine.Engine;
 import com.simple.sjge.entities.AITestEntity;
 import com.simple.sjge.entities.AITestEntity2;
 import com.simple.sjge.entities.Entity;
-import com.simple.sjge.gfx.Colour;
 import com.simple.sjge.gui.GuiConsole;
 import com.simple.sjge.level.Level;
 

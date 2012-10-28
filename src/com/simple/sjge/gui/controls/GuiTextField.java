@@ -11,6 +11,8 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.simple.sjge.engine.Engine;
 import com.simple.sjge.engine.Keyboard;
@@ -32,7 +34,15 @@ public class GuiTextField extends Gui {
 	public boolean isFocused;
 	public boolean isEnabled;
 	public String text;
-
+	
+	private Colour BACKGROUND_ENABLED = Colour.BLACK;
+	private Colour BACKGROUND_DISABLED = Colour.DARK_GREY;
+	private Colour BOX_COLOUR = new Colour(0x999999);
+	private Colour TEXT_COLOUR_ENABLED = Colour.WHITE;
+	private Colour TEXT_COLOUR_HIGHLIGHTED = Colour.BLUE;
+	private Colour TEXT_COLOUR_DISABLED = Colour.LIGHT_GREY;
+	private Colour HIGHLIGHT_COLOUR = Colour.WHITE;
+	
 	public GuiTextField(int x, int y, String text) {
 		this(x, y, 200, 40, text);
 	}
@@ -55,21 +65,21 @@ public class GuiTextField extends Gui {
 		Graphics2D g = Engine.getGraphicsInstance();
 		Screen s = Engine.getInstance().screenInstance();
 		if (isEnabled)
-			g.setColor(Colour.BLACK);
+			g.setColor(BACKGROUND_ENABLED);
 		else
-			g.setColor(Colour.DARK_GRAY);
+			g.setColor(BACKGROUND_DISABLED);
 		g.fillRect(this.xPos, this.yPos, this.width, this.height);
-		g.setColor(new Colour(0x999999));
+		g.setColor(BOX_COLOUR);
 		g.drawRect(this.xPos, this.yPos, this.width, this.height);
 		boolean flag = isFocused && (tickCount / 20) % 2 == 0;
 		if (isHighlighted) {
 			Rectangle2D a = g.getFontMetrics().getStringBounds(this.text, g);
-			g.setColor(Colour.WHITE);
+			g.setColor(HIGHLIGHT_COLOUR);
 			g.fillRect(xPos + 3,  yPos + 3, (int)a.getWidth(), (int)a.getHeight());
-			g.setColor(Colour.BLUE);
+			g.setColor(TEXT_COLOUR_HIGHLIGHTED);
 		}
 		else
-			g.setColor(isEnabled ? Colour.WHITE : Colour.GRAY);
+			g.setColor(isEnabled ? TEXT_COLOUR_ENABLED : TEXT_COLOUR_DISABLED);
 
 		if (carretOffset == 0)
 			s.drawString((flag ? "|" : " ")+this.text, xPos + 3, yPos + 15);
@@ -94,6 +104,48 @@ public class GuiTextField extends Gui {
 
 	public void setText(String t) {
 		this.text = t;
+	}
+	
+	public Map<String, Colour> getColours() {
+		Map<String, Colour> c = new HashMap<String, Colour>();
+		c.put("BOX", BOX_COLOUR);
+		c.put("TEXT_HIGHLIGHTED", TEXT_COLOUR_HIGHLIGHTED);
+		c.put("TEXT_ENABLED", TEXT_COLOUR_ENABLED);
+		c.put("TEXT_DISABLED", TEXT_COLOUR_DISABLED);
+		c.put("HIGHLIGHT", HIGHLIGHT_COLOUR);
+		c.put("BACKGROUND_ENABLED", BACKGROUND_ENABLED);
+		c.put("BACKGROUND_DISABLED", BACKGROUND_DISABLED);
+		return c;
+		
+	}
+	
+	public void setEnabledTextColour(Colour c) {
+		this.TEXT_COLOUR_ENABLED = c;
+	}
+	
+	public void setdisalbedTextcolour(Colour c) {
+		this.TEXT_COLOUR_DISABLED = c;
+	}
+	
+	public void setHighlightedTextColour(Colour c) {
+		this.TEXT_COLOUR_HIGHLIGHTED = c;
+	}
+	
+	public void setEnabledBackgroundColour(Colour c) {
+		this.BACKGROUND_ENABLED = c;
+	}
+	
+	
+	public void setBackgrounddisabledcolour(Colour c) {
+		this.BACKGROUND_DISABLED = c;
+	}
+	
+	public void setBoxColour(Colour c) {
+		this.BOX_COLOUR = c;
+	}
+	
+	public void setHighlightColour(Colour c) {
+		this.HIGHLIGHT_COLOUR = c;
 	}
 
 	public void keyTyped(KeyEvent e) {

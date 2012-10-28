@@ -7,7 +7,6 @@ import com.simple.sjge.collision.BBox;
 import com.simple.sjge.engine.Engine;
 import com.simple.sjge.entities.Entity;
 import com.simple.sjge.gfx.Colour;
-import com.simple.sjge.gfx.FontRenderer;
 import com.simple.sjge.gfx.Screen;
 
 public class Level {
@@ -156,7 +155,7 @@ public class Level {
 				aiPath.render();
 			}
 		}
-
+		
 		for (BBox a : BBoxes)
 			screen.drawRect((a.x + xOffset), (a.y + yOffset), a.w, a.h, Colour.YELLOW);
 		for (Entity b : entities) 

@@ -19,6 +19,7 @@ import com.simple.sjge.gfx.FontRenderer;
 import com.simple.sjge.gfx.Screen;
 import com.simple.sjge.gui.Gui;
 import com.simple.sjge.gui.GuiConsole;
+import com.simple.sjge.gui.TestGui;
 import com.simple.sjge.level.Level;
 import com.simple.sjge.level.TestLevel;
 import com.simple.sjge.util.Debug;
@@ -26,15 +27,17 @@ import com.simple.sjge.util.Debug;
 public class Engine extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = 1341257396583356312L;
-	private static final String GAME_TITLE = "SiMPLE Engine 4";
-	private static final int BUFFER_LEVEL = 2;
-	private static final int HEIGHT_RATIO = 9;
-	private static final int WIDTH_RATIO = 16;
-	private static int GAME_WIDTH = 1024;
-	private static int GAME_HEIGHT = GAME_WIDTH * HEIGHT_RATIO / WIDTH_RATIO;
-	private static final double TICKS_PER_SECOND = 50.0;
+	protected static String GAME_TITLE = "SiMPLE Engine 4";
+	protected static int BUFFER_LEVEL = 2;
+	protected static int HEIGHT_RATIO = 9;
+	protected static int WIDTH_RATIO = 16;
+	protected static int GAME_WIDTH = 1024;
+	protected static int GAME_HEIGHT = GAME_WIDTH * HEIGHT_RATIO / WIDTH_RATIO;
+	protected static double TICKS_PER_SECOND = 50.0;
+	protected static boolean INITIALISED = false;
+	protected static boolean LOADLEVELS = true;
 
-	private static int FPS_LIMIT = -1;
+	protected static int FPS_LIMIT = -1;
 
 	private static Engine engine;
 	private static Frame frame;
@@ -52,6 +55,7 @@ public class Engine extends Canvas implements Runnable {
 	public static boolean ALLOW_OVERDRAGGING = false;
 
 	Gui currentGui = null;
+	private static String pendingGui = "";
 	public static GuiConsole guiConsole;
 
 	public static final String allowedCharacters = "abcdefghijklmnopqrstuvwxyz1234567890.+-*/`¬¦!\"£$€%^&*()_{}[]@~'#<>?,/\\;:";
@@ -68,12 +72,21 @@ public class Engine extends Canvas implements Runnable {
 			for (String line : args) {
 				if (line.startsWith("-debug="))
 					DEBUG_ENABLED = Boolean.parseBoolean(line.split("=")[1]);
+				if (line.startsWith("-fpslimit="))
+					FPS_LIMIT = Integer.valueOf(line.split("=")[1]);
+				if (line.startsWith("-title="))
+					setTitle(line.split("=")[1]);
 				if (line.startsWith("-print-fps="))
 					PRINT_FPS = Boolean.parseBoolean(line.split("=")[1]);
+				if (line.equals("-donotloadlevels") || line.equals("-donotsetlevel"))
+					LOADLEVELS = false;
 				if (line.startsWith("-resx="))
 					GAME_WIDTH = Integer.valueOf(line.split("=")[1]);
-				if (line.startsWith("-resy"))
+				if (line.startsWith("-resy="))
 					GAME_HEIGHT = Integer.valueOf(line.split("=")[1]);
+				if (line.startsWith("-gui=")) {
+					pendingGui = line.split("=")[1];
+				}
 			}
 		engine = new Engine();
 		Debug.p("SiMPLE Engine "+engine.getVersion());
@@ -120,15 +133,37 @@ public class Engine extends Canvas implements Runnable {
 	public void stop() {
 		GAME_RUNNING = false;
 	}
+	
+	public void initAndStart() {
+		INITIALISED = true;
+		init();
+		start();
+	}
 
 	public void init() {
+		INITIALISED = true;
 		fontRenderer = new FontRenderer(this);
 		input = new KeyboardHandler(this);
 		Debug.p("");
 		Debug.p("Screen:");
-		Debug.p(screen.toString()+", "+engine.toString()+", "+screen.width+", "+screen.height);
+		Debug.p(screen.toString()+", "+this.toString()+", "+screen.width+", "+screen.height);
 		Debug.p("");
-		setLevel(new TestLevel(1280, 720, screen));
+		if (LOADLEVELS)
+			setLevel(new TestLevel(1280, 720, screen));
+		if (pendingGui != null)
+			setGui(pendingGui);
+	}
+
+	private void setGui(String gui1) {
+		Gui newGui;
+		try {
+			newGui = (Gui)Class.forName(gui1).newInstance();
+			pendingGui = gui1;
+			setGui(newGui);
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+			System.err.println("Could not create class for specified GUI: "+gui1);
+			e.printStackTrace();
+		}
 	}
 
 	public void setLevel(Level level) {
@@ -144,7 +179,8 @@ public class Engine extends Canvas implements Runnable {
 		double processQueue = 0.0;
 		double ticksPerLoop = 1000000000 / TICKS_PER_SECOND;
 		long lastTick = System.currentTimeMillis();
-		init();
+		if (!INITIALISED)
+			init();
 		while (GAME_RUNNING) {
 			long now = System.nanoTime();
 			processQueue += (double)(now - lastTime) / ticksPerLoop;
@@ -289,6 +325,15 @@ public class Engine extends Canvas implements Runnable {
 
 	public Screen screenInstance() {
 		return screen;
+	}
+	
+	public static void setTitle(String string) {
+		GAME_TITLE = string;
+		Debug.p("Window title is now \""+string+"\"");
+	}
+	
+	public static void setFPSLimit(int fps) {
+		FPS_LIMIT = fps;
 	}
 
 }

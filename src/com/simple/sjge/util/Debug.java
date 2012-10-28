@@ -1,5 +1,6 @@
 package com.simple.sjge.util;
 
+import com.simple.sjge.engine.console.Console;
 import com.simple.sjge.gui.GuiConsole;
 
 public class Debug {
@@ -7,7 +8,11 @@ public class Debug {
 	static java.io.PrintStream o = System.out;
 
 	public static void p(String s) {
-		GuiConsole.console.addConsoleMessage(s);
+		Console a = GuiConsole.console;
+		if (a == null)
+			System.err.println(s);
+		else
+			a.addConsoleMessage(s);
 	}
 	
 	public static void p(int i) {
