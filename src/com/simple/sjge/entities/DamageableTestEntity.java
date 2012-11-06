@@ -9,7 +9,7 @@ public class DamageableTestEntity extends AITestEntity {
 
 	public DamageableTestEntity(int x, int y, int w, int h, Level level) {
 		super(x, y, w, h, level);
-		shield = new Shield(this, 1000, 200, 500);
+		shield = new Shield(this, 1000, 200, 500, 50);
 		healthBar = new HealthBar(this, 1000);
 		shieldBar = new ShieldBar(shield);
 	}
@@ -27,7 +27,7 @@ public class DamageableTestEntity extends AITestEntity {
 	
 	public void damage(int i, Entity e) {
 		if (!shield.isEmpty()) {
-			float a = shield.damage(i);
+			int a = shield.damage(i);
 			if (a > 0)
 				damage((int)a, e);
 		}

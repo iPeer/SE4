@@ -23,15 +23,15 @@ public class HealthBar {
 		this.colours = generateColours(maxHealth);
 	}
 	
-	private int[] generateColours(int h) {
-		float step = (1.f/h)*2;
-		int[] colour = new int[h];
+	private int[] generateColours(int hp) {
+		float step = (1.f/hp)*2;
+		int[] colour = new int[hp];
 		boolean redDone = false;
 		boolean greenDone = false;
 		float green = 1.f;
 		float red = 0.f;
-		colour[h-1] = new Colour(0.f, green, 0.f).getRGB();
-		for (int x = h-1; x > 0; x--) {
+		colour[hp-1] = new Colour(0.f, green, 0.f).getRGB();
+		for (int x = hp-1; x > 0; x--) {
 			if (!redDone) {
 				red += step;
 				if (red >= 1.f) {
@@ -72,7 +72,7 @@ public class HealthBar {
 //				green = 0;
 //		}
 //		c = new Colour(red, green, 0);
-		int hp = owner.getHealth()-1;
+		int hp = (int)owner.getHealth()-1;
 		if (hp < 0)
 			hp = 0;
 		g.setColor(new Colour(colours[hp]));

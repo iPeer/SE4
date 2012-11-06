@@ -7,10 +7,10 @@ public class HealthBarTestEntity extends Entity {
 	
 	HealthBar healthbar;
 	private int dir = 0;
-	private int health = 100;
 
 	public HealthBarTestEntity(int x, int y, int w, int h, Level level) {
 		super(x, y, w, h, level);
+		health = 100;
 		healthbar = new HealthBar(this, health);
 	}
 	
@@ -27,10 +27,6 @@ public class HealthBarTestEntity extends Entity {
 		}
 		super.tick();
 		
-	}
-	
-	public int getHealth() {
-		return this.health;
 	}
 	
 	public void render() {

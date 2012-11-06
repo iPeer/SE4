@@ -10,6 +10,7 @@ public class Shield {
 	private int ticksEmpty = 0;
 	boolean charging = false;
 	private int chargeDelay = 20;
+	private int chargeRate = 1;
 
 	public Shield(Entity owner, int capacity) {
 		this(owner, capacity, capacity, 20);
@@ -18,12 +19,17 @@ public class Shield {
 	public Shield(Entity owner, int capacity, int current) {
 		this(owner, capacity, current, 20);
 	}
-
+	
 	public Shield(Entity owner, int capacity, int current, int chargeDelay) {
+		this(owner, capacity, current, chargeDelay, 1);
+	}
+
+	public Shield(Entity owner, int capacity, int current, int chargeDelay, int chargeRate) {
 		this.owner = owner;
 		this.capacity = capacity;
 		this.current = current;
 		this.chargeDelay = chargeDelay;
+		this.chargeRate = chargeRate;
 	}
 
 	public int getCapacity() {
@@ -58,10 +64,12 @@ public class Shield {
 			ticksEmpty = 0;
 		}
 		if (charging) {
-			this.current++;
+			this.current += chargeRate;
 		}
-		if (this.current == this.capacity)
+		if (this.current >= this.capacity) {
 			this.charging = false;
+			this.current = this.capacity;
+		}
 	}
 
 	public int getTicksEmpty() {
@@ -78,14 +86,14 @@ public class Shield {
 			this.current = valueOf;
 	}
 	
-	public float damage(int dam) {
-		return damage((float)dam);
+	public int damage(float dam) {
+		return damage((int)dam);
 	}
 
-	public float damage(float dam) {
-		float shield = this.current - dam;
+	public int damage(int dam) {
+		int shield = this.current - dam;
 		setCurrent(this.current - dam);
-		if (shield < 0.0)
+		if (shield < 0)
 			return +shield;
 		return 0;
 	}

@@ -53,7 +53,7 @@ public class Engine extends Canvas implements Runnable {
 	static boolean GAME_RUNNING = false;
 	public static boolean CHECK_COLLISIONS = true;
 	public static boolean ALLOW_OVERDRAGGING = false;
-	public static Point Mouse;
+	public static Point Mouse = new Point(0, 0);
 
 	Gui currentGui = null;
 	private static String pendingGui = "";

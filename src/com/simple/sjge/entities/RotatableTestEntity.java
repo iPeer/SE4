@@ -18,9 +18,9 @@ public class RotatableTestEntity extends Entity {
 	public void render() {
 		Graphics2D g = Engine.getGraphicsInstance();
 		AffineTransform old = g.getTransform();
-		if (Engine.DEBUG_ENABLED) {
-			g.drawLine((this.x + level.xOffset)  + (this.w / 2), (this.y + level.yOffset) + (this.h / 2), Engine.Mouse.x, Engine.Mouse.y);
-		}
+//		if (Engine.DEBUG_ENABLED) {
+//			g.drawLine((this.x + level.xOffset)  + (this.w / 2), (this.y + level.yOffset) + (this.h / 2), Engine.Mouse.x, Engine.Mouse.y);
+//		}
 		try {
 			double angle = getAngle(Engine.Mouse.x, Engine.Mouse.y);
 			g.rotate(angle, (this.x + (this.w / 2)) + level.xOffset, (this.y + (this.h / 2) + level.yOffset));

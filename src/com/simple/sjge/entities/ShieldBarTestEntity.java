@@ -11,12 +11,11 @@ public class ShieldBarTestEntity extends Entity {
 	HealthBar healthbar;
 	ShieldBar shieldBar;
 	private int dir = 0;
-	private int health = 1000;
 	Shield shield;
 
 	public ShieldBarTestEntity(int x, int y, int w, int h, Level level) {
 		super(x, y, w, h, level);
-		healthbar = new HealthBar(this, health);
+		healthbar = new HealthBar(this, 1000);
 		shield = new Shield(this, 100, 0, 120);
 		shieldBar = new ShieldBar(shield);
 		setAIPackage(new UpDownAI(this));
@@ -26,7 +25,7 @@ public class ShieldBarTestEntity extends Entity {
 	public void tick() {
 		shield.tick();
 		if (dir == 0) {
-			this.health--;
+			this.damage(1, this);
 			if (this.health <= 0)
 				dir = 1;
 		}
@@ -37,10 +36,6 @@ public class ShieldBarTestEntity extends Entity {
 		}
 		super.tick();
 		
-	}
-	
-	public int getHealth() {
-		return this.health;
 	}
 	
 	public Shield getShield() {

@@ -185,7 +185,9 @@ public class Entity {
 	}
 
 	public void damage(int i, Entity e) {
-
+		this.health -= i;
+		if (this.health < 0)
+			this.health = 0;
 	}
 
 	public void setShouldTick(boolean b) {
