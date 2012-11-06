@@ -1,6 +1,7 @@
 package com.simple.sjge.entities;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -43,6 +44,7 @@ public class Entity {
 	protected int damageTick = 0;
 	private boolean shouldTick = true;
 	BufferedImage sprite;
+	private boolean entityCollisions = false;
 
 	public Entity(int x, int y, int w, int h, Level level) {
 		this.x = x;
@@ -50,8 +52,10 @@ public class Entity {
 		this.w = w;
 		this.h = h;
 		this.bbox = new BBox(x, y, w, h);
-		this.xbbox = new BBox(x - 1, y - 1, w + 1, h - 1);
-		this.ybbox = new BBox(x - 1, y - 1, w - 1, h + 1);
+//		this.xbbox = new BBox(x - 1, y - 1, w + 1, h - 1);
+//		this.ybbox = new BBox(x - 1, y - 1, w - 1, h + 1);
+		this.xbbox = new BBox(x - 1, y, w + 2, h);
+		this.ybbox = new BBox(x, y - 1, w, h + 2);
 		this.level = level;
 		this.engine = Engine.getInstance();
 		this.screen = level.getScreen();
@@ -61,7 +65,7 @@ public class Entity {
 		catch (IOException e) {
 			System.err.println("Unable to set sprite for entity "+getID());
 		}
-		move(x, y, w, h, false);
+		//move(x, y, w, h, false);
 
 	}
 
@@ -147,6 +151,35 @@ public class Entity {
 					return;
 				}
 			}
+			
+			if (entityCollisions && Engine.CHECK_ENTITY_COLLISIONS) {
+				for (Entity e : level.entities) {
+					if (e.equals(this))
+						continue;
+					boolean a = e.collidesWithX(this);
+					boolean b = e.collidesWithY(this);
+					boolean c = e.entityCollisions;			
+					if ((a && b) && c) {
+						e.collidedX();
+						e.collidedY();
+						this.collidedX();
+						this.collidedY();
+						return;
+					}
+					if (a && c) {
+						e.collidedX();
+						this.collidedX();
+						return;
+					}
+					if (b && c) {
+						e.collidedY();
+						this.collidedY();
+						return;
+					}
+					
+				}
+			}
+			
 		}
 		this.x = x;
 		this.y = y;
@@ -155,6 +188,30 @@ public class Entity {
 		this.bbox = new BBox(x, y, w, h);
 		this.xbbox = new BBox(x - 1, y, w + 2, h);
 		this.ybbox = new BBox(x, y - 1, w, h + 2);
+	}
+	
+	public boolean collidesWithX(BBox a) {
+		if (!Engine.CHECK_ENTITY_COLLISIONS)
+			return false;
+		Rectangle check = new Rectangle(a.x, a.y, a.w, a.h);
+		return xbbox.intersects(a);
+		//return check.intersects(this.xbbox.box);
+	}
+	
+	public boolean collidesWithY(BBox a) {
+		if (!Engine.CHECK_ENTITY_COLLISIONS)
+			return false;
+		Rectangle check = new Rectangle(a.x, a.y, a.w, a.h);
+		return ybbox.intersects(a);
+		//return check.intersects(this.ybbox.box);
+	}
+	
+	public boolean collidesWithX(Entity e) {
+		return this.xbbox.intersects(e.xbbox);
+	}
+	
+	public boolean collidesWithY(Entity e) {
+		return this.ybbox.intersects(e.ybbox);
 	}
 
 	public void render() { 
@@ -207,6 +264,16 @@ public class Entity {
 
 	public void setHealth(int maxHealth) {
 		this.health = maxHealth;
+	}
+	
+	public void setEntityCollisions(boolean c) {
+		this.entityCollisions = c;
+	}
+	
+	public boolean mouseOver() {
+		Point mouse = Engine.Mouse;
+		Rectangle rect = new Rectangle(this.x + level.xOffset, this.y + level.yOffset, this.w, this.h);
+		return rect.contains(mouse);
 	}
 
 }

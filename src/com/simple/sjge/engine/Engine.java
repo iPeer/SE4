@@ -52,6 +52,7 @@ public class Engine extends Canvas implements Runnable {
 
 	static boolean GAME_RUNNING = false;
 	public static boolean CHECK_COLLISIONS = true;
+	public static boolean CHECK_ENTITY_COLLISIONS = true;
 	public static boolean ALLOW_OVERDRAGGING = false;
 	public static Point Mouse = new Point(0, 0);
 
@@ -62,6 +63,8 @@ public class Engine extends Canvas implements Runnable {
 	public static final String allowedCharacters = "abcdefghijklmnopqrstuvwxyz1234567890.+-*/`¬¦!\"£$€%^&*()_{}[]@~'#<>?,/\\;:";
 	public static boolean PRINT_FPS = true;
 	public static boolean DEBUG_ENABLED = false;
+	
+	public static long tickTime, renderTime, totalTime;
 
 	public Engine() {
 		guiConsole = new GuiConsole(this);
@@ -186,6 +189,7 @@ public class Engine extends Canvas implements Runnable {
 		if (!INITIALISED)
 			init();
 		while (GAME_RUNNING) {
+			long now1 = System.currentTimeMillis();
 			long now = System.nanoTime();
 			processQueue += (double)(now - lastTime) / ticksPerLoop;
 			lastTime = now;
@@ -215,11 +219,13 @@ public class Engine extends Canvas implements Runnable {
 				frames = ticks = 0;
 				lastTick = System.currentTimeMillis();
 			}
+			totalTime = System.currentTimeMillis() - now1;
 		}
 		System.exit(0);
 	}
 
-	public void tick() {		
+	public void tick() {	
+		long tick = System.currentTimeMillis();
 		input.tick();
 		if (input.debug.down && (System.currentTimeMillis() - input.lastDebugPress) > 200L) {
 			DEBUG_ENABLED = !DEBUG_ENABLED;
@@ -240,10 +246,11 @@ public class Engine extends Canvas implements Runnable {
 
 		if (level != null)
 			level.tick();
-
+		tickTime = System.currentTimeMillis() - tick;
 	}
 
 	public void render() { 
+		long render = System.currentTimeMillis();
 		BufferStrategy bs = getBufferStrategy();
 		if (bs == null) {
 			createBufferStrategy(BUFFER_LEVEL);
@@ -261,15 +268,15 @@ public class Engine extends Canvas implements Runnable {
 		screen.setGraphics(g);
 		screen.render();
 		
-		if (DEBUG_ENABLED)
-			drawDebug(g);
 		if (level != null)
 			level.render();
 		if (currentGui != null)
 			currentGui.render();
+		if (DEBUG_ENABLED)
+			drawDebug(g);
 		g.dispose();
 		bs.show();
-
+		renderTime = System.currentTimeMillis() - render;
 	}
 
 	public void drawDebug(Graphics2D g) { // [Roxy] Draws debug output to the game screen

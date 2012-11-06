@@ -134,12 +134,24 @@ public class Level {
 	}
 
 	public void render() {
+		
+		for (BBox a : BBoxes)
+			screen.drawRect((a.x + xOffset), (a.y + yOffset), a.w, a.h, Colour.YELLOW);
+		for (Entity b : entities) 
+			if (b.isOnScreen()) {
+				onScreenEntities++;
+				b.render();
+			}
+		lastOnScreenEntities = onScreenEntities;
+		onScreenEntities = 0;
+		
 		if (Engine.DEBUG_ENABLED) {
 			int a = screen.getGraphics().getFontMetrics().stringWidth(this.toString().split("@")[0]+" ("+this.toString().split("@")[1]+")");
 			int b = (screen.width - a) / 2;
 			screen.drawString(this.toString().split("@")[0]+" ("+this.toString().split("@")[1]+")", b, 12, Colour.WHITE);
 			screen.drawString("SiMPLE Engine "+engine.getVersion()+" "+(Engine.DEBUG_ENABLED ? "[DEBUG MODE]" : ""), 2, 12);
 			screen.drawString("E: "+lastOnScreenEntities+"/"+entities.size()+" B: "+BBoxes.size(), 2, 32);
+			screen.drawString("TO: "+Engine.totalTime+"ms TI: "+Engine.tickTime+"ms R: "+Engine.renderTime+"ms", 2, 42);
 //			int y = 42;
 //			int entity = 0;
 //			for (Entity e : entities) {
@@ -155,16 +167,6 @@ public class Level {
 				aiPath.render();
 			}
 		}
-		
-		for (BBox a : BBoxes)
-			screen.drawRect((a.x + xOffset), (a.y + yOffset), a.w, a.h, Colour.YELLOW);
-		for (Entity b : entities) 
-			if (b.isOnScreen()) {
-				onScreenEntities++;
-				b.render();
-			}
-		lastOnScreenEntities = onScreenEntities;
-		onScreenEntities = 0;
 
 	}
 

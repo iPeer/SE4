@@ -1,5 +1,6 @@
 package com.simple.sjge.collision;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 
 import com.simple.sjge.engine.Engine;
@@ -71,6 +72,11 @@ public class BBox {
 
 	public void render(Level level) {
 		Engine.getGraphicsInstance().drawRect(this.x + level.xOffset, this.y + level.yOffset, this.w, this.h);
+	}
+
+	public boolean contains(Point point) {
+		Rectangle rec = new Rectangle(this.x, this.y ,this.w, this.h);
+		return rec.contains(point);
 	}
 	
 }

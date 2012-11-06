@@ -43,6 +43,7 @@ public class iMouseMotionListener implements MouseMotionListener {
 		int j = e.getY();
 		Engine.Mouse = new Point(i, j);
 		Gui gui = engine.currentGui;
+		Level level = engine.getLevel();
 		if (gui != null) { 
 			ArrayList controls = gui.controls;
 			for (int l = 0; l < controls.size(); l++) {
@@ -72,6 +73,9 @@ public class iMouseMotionListener implements MouseMotionListener {
 				}
 			}
 		}
+//		else if (gui == null && !level.entities.isEmpty()) {
+//			
+//		}
 	}
 
 }

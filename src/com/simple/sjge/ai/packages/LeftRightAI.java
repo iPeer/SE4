@@ -24,4 +24,5 @@ public class LeftRightAI extends AI {
 		entity.left = !a;
 	}
 	
+	
 }

@@ -7,7 +7,7 @@ import com.simple.sjge.entities.extensions.Shield;
 import com.simple.sjge.level.Level;
 
 public class ShieldBarTestEntity extends Entity {
-	
+
 	HealthBar healthbar;
 	ShieldBar shieldBar;
 	private int dir = 0;
@@ -35,19 +35,21 @@ public class ShieldBarTestEntity extends Entity {
 				dir = 0;
 		}
 		super.tick();
-		
+
 	}
-	
+
 	public Shield getShield() {
 		return shield;
 	}
-	
+
 	public void render() {
-		healthbar.render();
-		shieldBar.render();
+		if (mouseOver()) {
+			healthbar.render();
+			shieldBar.render();
+		}
 		super.render();
 	}
-	
-	
+
+
 
 }

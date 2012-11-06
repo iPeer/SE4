@@ -67,8 +67,15 @@ public class Console {
 			System.exit(0);
 		else if (args[0].matches("t(oggle)?c(ol)?l(isions)?")) {
 			Engine.CHECK_COLLISIONS = !Engine.CHECK_COLLISIONS;
+			Engine.CHECK_ENTITY_COLLISIONS = !Engine.CHECK_ENTITY_COLLISIONS;
 			level.removeColliding();
 			addConsoleMessage("Collisions = "+(Engine.CHECK_COLLISIONS ? "ON" : "OFF"));
+			addConsoleMessage("entityCollisions = "+(Engine.CHECK_ENTITY_COLLISIONS ? "ON" : "OFF"));
+		}
+		else if (args[0].matches("t(oggle)?e(ntity)?c(ol)?l(isions)?")) {
+			Engine.CHECK_ENTITY_COLLISIONS = !Engine.CHECK_ENTITY_COLLISIONS;
+			level.removeColliding();
+			addConsoleMessage("entityCollisions = "+(Engine.CHECK_ENTITY_COLLISIONS ? "ON" : "OFF"));
 		}
 		else if (args[0].matches("t(oggle)?fpsi(n)?c(onsole)?")) {
 			Engine.PRINT_FPS = !Engine.PRINT_FPS;
