@@ -25,6 +25,7 @@ public class Level {
 	private boolean allowYDragging = true;
 	private int maxXDrag = 0;
 	private int maxYDrag = 0;
+	private int lastOnScreenEntities, onScreenEntities;
 
 	public Level(int width, int height, Screen screen) {
 		this.width = width;
@@ -138,19 +139,18 @@ public class Level {
 			int b = (screen.width - a) / 2;
 			screen.drawString(this.toString().split("@")[0]+" ("+this.toString().split("@")[1]+")", b, 12, Colour.WHITE);
 			screen.drawString("SiMPLE Engine "+engine.getVersion()+" "+(Engine.DEBUG_ENABLED ? "[DEBUG MODE]" : ""), 2, 12);
-			screen.drawString(BBoxes.size()+" BBs", 2, 32);
-			screen.drawString(entities.size()+" entities", 2, 42);
-			int y = 42;
-			int entity = 0;
-			for (Entity e : entities) {
-				entity++;
-				if (y + 24 > engine.getHeight()) {
-					screen.drawString((entities.size() + 1) - entity+" more...", 2, y+=12);
-					break;
-				}
-				else
-					screen.drawString((isOffLevel(e) ? "\247c" : (!e.isOnScreen() ? "\247e" : ""))+e.getID()+" | X: "+e.x+", Y: "+e.y+", W: "+e.w+", H: "+e.h, 2, y+=12, (isOffLevel(e) ? Colour.RED : Colour.WHITE));
-			}
+			screen.drawString("E: "+lastOnScreenEntities+"/"+entities.size()+" B: "+BBoxes.size(), 2, 32);
+//			int y = 42;
+//			int entity = 0;
+//			for (Entity e : entities) {
+//				entity++;
+//				if (y + 24 > engine.getHeight()) {
+//					screen.drawString((entities.size() + 1) - entity+" more...", 2, y+=12);
+//					break;
+//				}
+//				else
+//					screen.drawString((isOffLevel(e) ? "\247c" : (!e.isOnScreen() ? "\247e" : ""))+e.getID()+" | X: "+e.x+", Y: "+e.y+", W: "+e.w+", H: "+e.h, 2, y+=12, (isOffLevel(e) ? Colour.RED : Colour.WHITE));
+//			}
 			if (aiPath != null) {
 				aiPath.render();
 			}
@@ -159,8 +159,12 @@ public class Level {
 		for (BBox a : BBoxes)
 			screen.drawRect((a.x + xOffset), (a.y + yOffset), a.w, a.h, Colour.YELLOW);
 		for (Entity b : entities) 
-			if (b.isOnScreen())
+			if (b.isOnScreen()) {
+				onScreenEntities++;
 				b.render();
+			}
+		lastOnScreenEntities = onScreenEntities;
+		onScreenEntities = 0;
 
 	}
 

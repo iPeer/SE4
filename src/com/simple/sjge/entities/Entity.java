@@ -1,10 +1,10 @@
 package com.simple.sjge.entities;
 
+import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
@@ -45,7 +45,6 @@ public class Entity {
 	BufferedImage sprite;
 
 	public Entity(int x, int y, int w, int h, Level level) {
-
 		this.x = x;
 		this.y = y;
 		this.w = w;
@@ -79,7 +78,7 @@ public class Entity {
 	public void setAIPackage(AI ai) {
 		this.aiPackage = ai;
 	}
-	
+
 	public void tick() { 
 		if (!this.shouldTick)
 			return;
@@ -120,15 +119,15 @@ public class Entity {
 		if (aiPackage != null)
 			aiPackage.collidedY();
 	}
-	
+
 	public void move (int x, int y, int w, int h) {
 		move(x, y, w, h, true);
 	}
 
 	public void move(int x, int y, int w, int h, boolean collisions) {
 		if (collisions) {
-//			boolean collidesX = false;
-//			boolean collidesY = false;
+			//			boolean collidesX = false;
+			//			boolean collidesY = false;
 			for (BBox a : level.BBoxes) {
 				boolean b = a.collidesX(xbbox);
 				boolean c = a.collidesY(ybbox);
@@ -176,7 +175,7 @@ public class Entity {
 			entity = new Rectangle(this.x + level.xOffset, this.y + level.yOffset, w, h);
 		return entity.intersects(screen1);
 	}
-	
+
 	public int getHealth() {
 		return health;
 	}
@@ -185,12 +184,27 @@ public class Entity {
 		return shield;
 	}
 
-	public void damage(int i) {
-		
+	public void damage(int i, Entity e) {
+
 	}
 
 	public void setShouldTick(boolean b) {
-		this.shouldTick  = b;
+		this.shouldTick = b;
+	}
+
+	public double getAngle(int x, int y) {
+		double dx = x - ((this.x + (this.w / 2)) + level.xOffset);
+		double dy = y - ((this.y + (this.h / 2)) + level.yOffset);
+		double a = Math.toRadians((360 + Math.toDegrees(Math.atan2(dx, dy))) % 360);
+		return Math.PI-a;
+	}
+	
+	public double getAngle(Entity entity) {
+		return getAngle((entity.x + (entity.w / 2)) + level.xOffset, (entity.y + (entity.h / 2)) + level.yOffset);
+	}
+
+	public void setHealth(int maxHealth) {
+		this.health = maxHealth;
 	}
 
 }

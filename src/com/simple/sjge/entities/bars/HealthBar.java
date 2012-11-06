@@ -13,10 +13,43 @@ public class HealthBar {
 	public int length = 30;
 	public int height = 10;
 	private int maxHealth = 100;
+	private int[] colours;
 
 	public HealthBar(Entity owner, int maxHealth) {
 		this.owner = owner;
+		if (owner.getHealth() < maxHealth)
+			owner.setHealth(maxHealth);
 		this.maxHealth = maxHealth;
+		this.colours = generateColours(maxHealth);
+	}
+	
+	private int[] generateColours(int h) {
+		float step = (1.f/h)*2;
+		int[] colour = new int[h];
+		boolean redDone = false;
+		boolean greenDone = false;
+		float green = 1.f;
+		float red = 0.f;
+		colour[h-1] = new Colour(0.f, green, 0.f).getRGB();
+		for (int x = h-1; x > 0; x--) {
+			if (!redDone) {
+				red += step;
+				if (red >= 1.f) {
+					red = 1.f;
+					redDone = true;
+				}
+			}
+			else if (redDone && !greenDone) {
+				green -= step;
+				if (green <= 0.f) {
+					green = 0.f;
+					greenDone = true;
+				}
+			}
+			colour[x] = new Colour(red, green, 0.f).getRGB();
+			
+		}
+		return colour;
 	}
 
 	public void render() {
@@ -39,15 +72,10 @@ public class HealthBar {
 //				green = 0;
 //		}
 //		c = new Colour(red, green, 0);
-		int hp = owner.getHealth();
-		if (hp > maxHealth*.66)
-			c = Colour.GREEN;
-		if (hp < maxHealth*.66)
-			c = Colour.ORANGE;
-		if (hp < maxHealth*.33)
-			c = Colour.RED;
-	
-		g.setColor(c);
+		int hp = owner.getHealth()-1;
+		if (hp < 0)
+			hp = 0;
+		g.setColor(new Colour(colours[hp]));
 		g.fillRect((owner.x + owner.level.xOffset) + (owner.w - (this.length - 2)) / 2, (owner.y + owner.level.yOffset) - this.height, (this.length*owner.getHealth()/maxHealth) - 1, this.height - 5);
 		if (Engine.DEBUG_ENABLED)
 			g.drawString(Integer.toString(owner.getHealth()), (owner.x + owner.level.xOffset) + this.length - 3, (owner.y + owner.level.yOffset) - 4);

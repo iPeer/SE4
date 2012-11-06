@@ -1,5 +1,6 @@
 package com.simple.sjge.engine;
 
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class iMouseMotionListener implements MouseMotionListener {
 	public void mouseMoved(MouseEvent e) {
 		int i = e.getX();
 		int j = e.getY();
+		Engine.Mouse = new Point(i, j);
 		Gui gui = engine.currentGui;
 		if (gui != null) { 
 			ArrayList controls = gui.controls;

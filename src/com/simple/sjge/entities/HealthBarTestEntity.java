@@ -11,7 +11,7 @@ public class HealthBarTestEntity extends Entity {
 
 	public HealthBarTestEntity(int x, int y, int w, int h, Level level) {
 		super(x, y, w, h, level);
-		healthbar = new HealthBar(this, 100);
+		healthbar = new HealthBar(this, health);
 	}
 	
 	public void tick() {

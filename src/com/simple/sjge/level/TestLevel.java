@@ -2,6 +2,7 @@ package com.simple.sjge.level;
 
 import com.simple.sjge.ai.AIPath;
 import com.simple.sjge.ai.packages.BouncingAI;
+import com.simple.sjge.ai.packages.PathAI;
 import com.simple.sjge.collision.BBox;
 import com.simple.sjge.entities.AITestEntity;
 import com.simple.sjge.entities.AITestEntity2;
@@ -9,6 +10,8 @@ import com.simple.sjge.entities.DamageableTestEntity;
 import com.simple.sjge.entities.DamagingTestEntity;
 import com.simple.sjge.entities.Entity;
 import com.simple.sjge.entities.PathAITestEntity;
+import com.simple.sjge.entities.RotatableTestEntity;
+import com.simple.sjge.entities.RotatingDamagingTestEntity;
 import com.simple.sjge.entities.ShieldBarTestEntity;
 import com.simple.sjge.gfx.Screen;
 
@@ -36,10 +39,13 @@ public class TestLevel extends Level {
 		addEntity(new DamageableTestEntity(450, 105, 16, 16, this));
 		addEntity(new DamageableTestEntity(500, 105, 16, 16, this));
 		addEntity(new AITestEntity2(700, 150, 16, 16, this));
-		addEntity(new DamagingTestEntity(462, 146, 16, 16, this, 300, 100, 5, 25));
+		addEntity(new RotatingDamagingTestEntity(462, 146, 16, 16, this, 300, 100, 1, 25));
 		addEntity(new DamagingTestEntity(500, 146, 16, 16, this, 200, 100, 5, 45));
 		addEntity(new ShieldBarTestEntity(222, 300, 16, 16, this));
 		addEntity(new PathAITestEntity(100, 500, 16, 16, this));
+		Entity rot;
+		addEntity(rot = new RotatableTestEntity(100, 500, 16, 16, this));
+		rot.setAIPackage(new PathAI(rot));
 		Entity offLevelEntity;
 		addEntity(offLevelEntity = new AITestEntity(-74, 0, 64, 64, this));
 		offLevelEntity.setShouldTick(false);

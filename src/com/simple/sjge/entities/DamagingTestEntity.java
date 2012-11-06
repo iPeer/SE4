@@ -27,7 +27,7 @@ public class DamagingTestEntity extends AITestEntity3 {
 		if (damageTick >= damageDelay) {
 			damageTick = 0;
 			for (Entity e : targets)
-				e.damage(new Random().nextInt(20));
+				e.damage(new Random().nextInt(20), this);
 		}
 		else
 			damageTick++;

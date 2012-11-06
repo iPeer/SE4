@@ -12,6 +12,7 @@ import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferStrategy;
 
 import com.simple.sjge.gfx.Colour;
@@ -19,7 +20,6 @@ import com.simple.sjge.gfx.FontRenderer;
 import com.simple.sjge.gfx.Screen;
 import com.simple.sjge.gui.Gui;
 import com.simple.sjge.gui.GuiConsole;
-import com.simple.sjge.gui.TestGui;
 import com.simple.sjge.level.Level;
 import com.simple.sjge.level.TestLevel;
 import com.simple.sjge.util.Debug;
@@ -53,6 +53,7 @@ public class Engine extends Canvas implements Runnable {
 	static boolean GAME_RUNNING = false;
 	public static boolean CHECK_COLLISIONS = true;
 	public static boolean ALLOW_OVERDRAGGING = false;
+	public static Point Mouse;
 
 	Gui currentGui = null;
 	private static String pendingGui = "";
@@ -150,13 +151,16 @@ public class Engine extends Canvas implements Runnable {
 		Debug.p("");
 		if (LOADLEVELS)
 			setLevel(new TestLevel(1280, 720, screen));
-		if (pendingGui != null)
+		if (!pendingGui.equals("")) {
 			setGui(pendingGui);
+			pendingGui = "";
+		}
 	}
 
 	private void setGui(String gui1) {
 		Gui newGui;
 		try {
+			
 			newGui = (Gui)Class.forName(gui1).newInstance();
 			pendingGui = gui1;
 			setGui(newGui);

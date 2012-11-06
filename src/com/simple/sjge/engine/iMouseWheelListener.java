@@ -17,7 +17,8 @@ public class iMouseWheelListener implements MouseWheelListener {
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		Gui gui = engine.currentGui;
-		gui.mouseWheelScrolled(e.getWheelRotation());
+		if (gui != null)
+			gui.mouseWheelScrolled(e.getWheelRotation());
 //		if (gui instanceof GuiConsole)
 //			Engine.guiConsole.historyOffset += e.getWheelRotation();
 	}
