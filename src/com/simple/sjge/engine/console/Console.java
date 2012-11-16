@@ -63,8 +63,10 @@ public class Console {
 		else if (args[0].matches("c(lear)?b(bounding)?b(ox(es)?)?")) {
 			engine.level.BBoxes.clear();
 		}
-		else if (args[0].equals("qqq"))
+		else if (args[0].equals("qqq")) {
+			addConsoleMessage("Bye.");
 			System.exit(0);
+		}
 		else if (args[0].matches("t(oggle)?c(ol)?l(isions)?")) {
 			Engine.CHECK_COLLISIONS = !Engine.CHECK_COLLISIONS;
 			Engine.CHECK_ENTITY_COLLISIONS = !Engine.CHECK_ENTITY_COLLISIONS;

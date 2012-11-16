@@ -20,7 +20,7 @@ public class GuiConsole extends Gui {
 	private static final ArrayList<String> commandHistory = new ArrayList<String>();
 	public final ArrayList<ConsoleMessage> messageHistory = new ArrayList<ConsoleMessage>();
 	private static String text = "";
-	public static Console console;
+	public Console console;
 	private static int listPos = 0;
 	public int historyOffset = 0;
 	GuiTextField consoleInput;
@@ -28,7 +28,7 @@ public class GuiConsole extends Gui {
 	@SuppressWarnings("unchecked")
 	public GuiConsole(Engine engine) {
 		this.engine = engine;
-		console = new Console(engine, this);
+		this.console = new Console(engine, this);
 		controls.clear();
 		controls.add(consoleInput = new GuiTextField(2, ((engine.getHeight() + 100) / 2) - 22, engine.getWidth() - 4, 20, ""));
 		consoleInput.isFocused = true;
@@ -130,6 +130,10 @@ public class GuiConsole extends Gui {
 
 	public boolean pausesGame() {
 		return true;
+	}
+	
+	public void setConsole(Console c) {
+		this.console = c;
 	}
 
 }

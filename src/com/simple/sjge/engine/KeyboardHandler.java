@@ -88,12 +88,12 @@ public class KeyboardHandler implements KeyListener {
 		if (engine.currentGui != null)
 			engine.currentGui.keyTyped(e);
 		else
-			toggle(e, true);
+			Keyboard.toggle(e, true);
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		toggle(arg0, false);
+		Keyboard.toggle(arg0, false);
 	}
 
 	@Override
@@ -101,6 +101,7 @@ public class KeyboardHandler implements KeyListener {
 
 	}
 
+	@SuppressWarnings("unused")
 	private void toggle(KeyEvent e, boolean flag) {
 		int k = e.getKeyCode();
 		if (Arrays.asList(Keyboard.VK_Q, Keyboard.VK_ESCAPE).contains(k))

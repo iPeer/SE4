@@ -15,6 +15,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferStrategy;
 
+import com.simple.sjge.engine.console.Console;
 import com.simple.sjge.gfx.Colour;
 import com.simple.sjge.gfx.FontRenderer;
 import com.simple.sjge.gfx.Screen;
@@ -39,16 +40,19 @@ public class Engine extends Canvas implements Runnable {
 
 	protected static int FPS_LIMIT = -1;
 
-	private static Engine engine;
-	private static Frame frame;
-	private static Graphics2D g;
+	protected static Engine engine;
+	protected static Frame frame;
+	protected static Graphics2D g;
 	public KeyboardHandler input;
 	public FontRenderer fontRenderer;
+	public IKeyHandler keyHandler;
 
 	private int lastTicks, lastFrames;
 
-	private Screen screen;
+	protected Screen screen;
 	public Level level;
+	public GameRenderer gameRenderer;
+	public GameTicker gameTicker;
 
 	static boolean GAME_RUNNING = false;
 	public static boolean CHECK_COLLISIONS = true;
@@ -56,7 +60,7 @@ public class Engine extends Canvas implements Runnable {
 	public static boolean ALLOW_OVERDRAGGING = false;
 	public static Point Mouse = new Point(0, 0);
 
-	Gui currentGui = null;
+	protected Gui currentGui = null;
 	private static String pendingGui = "";
 	public static GuiConsole guiConsole;
 
@@ -175,7 +179,10 @@ public class Engine extends Canvas implements Runnable {
 
 	public void setLevel(Level level) {
 		Debug.p("Changing level!");
-		Debug.p(level.toString()+", "+level.width+", "+level.height);
+		if (level == null)
+			Debug.p("NULL");
+		else
+			Debug.p(level.toString()+", "+level.width+", "+level.height);
 		this.level = level;
 	}
 
@@ -226,18 +233,20 @@ public class Engine extends Canvas implements Runnable {
 
 	public void tick() {	
 		long tick = System.currentTimeMillis();
-		input.tick();
-		if (input.debug.down && (System.currentTimeMillis() - input.lastDebugPress) > 200L) {
+		//input.tick();
+		if (keyHandler != null)
+			keyHandler.tickKeys();
+		if (Keyboard.isKeyDown(Keyboard.F3) && (System.currentTimeMillis() - input.lastDebugPress) > 200L) {
 			DEBUG_ENABLED = !DEBUG_ENABLED;
 			input.lastDebugPress = System.currentTimeMillis();
 		}
-		if (input.console.down && (System.currentTimeMillis() - input.lastDebugPress) > 150L && !(currentGui instanceof GuiConsole)) {
+		if (Keyboard.isKeyDown(Keyboard.console) && (System.currentTimeMillis() - input.lastDebugPress) > 150L && !(currentGui instanceof GuiConsole)) {
 			setGui(guiConsole);
 			input.lastDebugPress = System.currentTimeMillis();
 		}
-		if (input.quit.down)
-			this.stop();
 		screen.tick();
+		if (gameTicker != null)
+			gameTicker.tick(this);
 		if (currentGui != null) {
 			currentGui.tick();
 			if (currentGui.pausesGame() && level != null)
@@ -268,6 +277,8 @@ public class Engine extends Canvas implements Runnable {
 		screen.setGraphics(g);
 		screen.render();
 		
+		if (gameRenderer != null)
+			gameRenderer.render(this, g);
 		if (level != null)
 			level.render();
 		if (currentGui != null)
@@ -345,6 +356,22 @@ public class Engine extends Canvas implements Runnable {
 	
 	public static void setFPSLimit(int fps) {
 		FPS_LIMIT = fps;
+	}
+	
+	public void setKeyHandler(IKeyHandler k) {
+		this.keyHandler = k;
+	}
+	
+	public void setConsole (Console c) {
+		guiConsole.console = c;
+	}
+	
+	public void setTicker(GameTicker t) {
+		this.gameTicker = t;
+	}
+	
+	public void setRenderer(GameRenderer r) {
+		this.gameRenderer = r;
 	}
 
 }
